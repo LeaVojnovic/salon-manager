@@ -46,8 +46,8 @@ public class AppointmentDialog extends JDialog {
             selectById(clientCombo, initial.getClient().getId());
             selectById(employeeCombo, initial.getEmployee().getId());
             selectById(serviceCombo, initial.getService().getId());
-            dateField.setText(initial.getAppointmentDate().toString());
-            timeField.setText(initial.getStartTime().toString());
+            dateField.setText(initial.getAppointmentDate().format(DateTimeFormats.DATE));
+            timeField.setText(initial.getStartTime().format(DateTimeFormats.TIME));
             paymentCombo.setSelectedItem(initial.getPaymentType());
         } else {
             dateField.setText(LocalDate.now().toString());
@@ -80,8 +80,8 @@ public class AppointmentDialog extends JDialog {
             Client client = (Client) clientCombo.getSelectedItem();
             Employee employee = (Employee) employeeCombo.getSelectedItem();
             Service service = (Service) serviceCombo.getSelectedItem();
-            LocalDate date = LocalDate.parse(dateField.getText().trim());
-            LocalTime time = LocalTime.parse(timeField.getText().trim());
+            LocalDate date = DateTimeFormats.parseDate(dateField.getText());
+            LocalTime time = DateTimeFormats.parseTime(timeField.getText());
             PaymentType payment = (PaymentType) paymentCombo.getSelectedItem();
             AppointmentStatus status = initial == null ? AppointmentStatus.ZAKAZAN : initial.getStatus();
             double price = initial == null ? service.getPrice() : initial.getPrice();
@@ -97,8 +97,9 @@ public class AppointmentDialog extends JDialog {
     private void updateEndTime() {
         try {
             Service service = (Service) serviceCombo.getSelectedItem();
-            LocalTime time = LocalTime.parse(timeField.getText().trim());
-            endTimeLabel.setText(service == null ? "-" : time.plusMinutes(service.getDurationMinutes()).toString());
+            LocalTime time = DateTimeFormats.parseTime(timeField.getText());
+            endTimeLabel.setText(service == null ? "-" : time.plusMinutes(service.getDurationMinutes())
+                    .format(DateTimeFormats.TIME));
         } catch (DateTimeParseException exception) {
             endTimeLabel.setText("-");
         }

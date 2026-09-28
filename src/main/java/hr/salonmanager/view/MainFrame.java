@@ -187,8 +187,9 @@ public class MainFrame extends JFrame {
         for (Appointment appointment : appointments) {
             appointmentsModel.addRow(new Object[]{
                     appointment.getClient().getName(), appointment.getEmployee().getName(),
-                    appointment.getService().getName(), appointment.getAppointmentDate(),
-                    appointment.getStartTime(), appointment.getEndTime(), priceFormat.format(appointment.getPrice()),
+                    appointment.getService().getName(), appointment.getAppointmentDate().format(DateTimeFormats.DATE),
+                    appointment.getStartTime().format(DateTimeFormats.TIME),
+                    appointment.getEndTime().format(DateTimeFormats.TIME), priceFormat.format(appointment.getPrice()),
                     statusText(appointment.getStatus()), appointment.getPaymentType()});
         }
         undoButton.setEnabled(controller.canUndo());
