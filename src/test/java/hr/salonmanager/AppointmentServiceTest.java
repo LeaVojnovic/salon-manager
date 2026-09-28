@@ -2,6 +2,7 @@ package hr.salonmanager;
 
 import hr.salonmanager.command.ChangeAppointmentCommand;
 import hr.salonmanager.command.CommandInvoker;
+import hr.salonmanager.command.CancelAppointmentCommand;
 import hr.salonmanager.model.Appointment;
 import hr.salonmanager.model.AppointmentStatus;
 import hr.salonmanager.model.Client;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AppointmentServiceTest {
     private AppointmentService appointmentService;
+    private ServiceCatalogService services;
     private Client client;
     private Employee employee;
     private Service service;
@@ -44,7 +46,7 @@ class AppointmentServiceTest {
         database.initializeSchema();
         ClientService clients = new ClientService(new JdbcClientRepository(database));
         EmployeeService employees = new EmployeeService(new JdbcEmployeeRepository(database));
-        ServiceCatalogService services = new ServiceCatalogService(new JdbcServiceRepository(database));
+        services = new ServiceCatalogService(new JdbcServiceRepository(database));
         SalonSettingsService settings = new SalonSettingsService(new JdbcSettingsRepository(database));
         appointmentService = new AppointmentService(
                 new JdbcAppointmentRepository(database), clients, employees, services, settings);
@@ -84,6 +86,7 @@ class AppointmentServiceTest {
         Appointment appointment = appointmentService.createAppointment(client, employee, service,
                 LocalDate.of(2026, 10, 3), LocalTime.of(10, 0), PaymentType.CASH);
         service.setPrice(35.00);
+        services.save(service);
         // Promjena cjenika ne smije promijeniti cijenu već spremljenog termina.
         assertEquals(20.00, appointmentService.findById(appointment.getId()).getPrice());
     }
@@ -101,5 +104,17 @@ class AppointmentServiceTest {
 
         invoker.undoLast();
         assertEquals(LocalTime.of(10, 0), appointmentService.findById(appointment.getId()).getStartTime());
+    }
+
+    @Test
+    void cancellingAndUndoRestoreThePreviouslyScheduledState() {
+        Appointment appointment = appointmentService.createAppointment(client, employee, service,
+                LocalDate.of(2026, 10, 5), LocalTime.of(10, 0), PaymentType.CARD);
+        CommandInvoker invoker = new CommandInvoker();
+        invoker.executeCommand(new CancelAppointmentCommand(appointmentService, appointment.getId()));
+
+        assertEquals(AppointmentStatus.OTKAZAN, appointmentService.findById(appointment.getId()).getStatus());
+        invoker.undoLast();
+        assertEquals(AppointmentStatus.ZAKAZAN, appointmentService.findById(appointment.getId()).getStatus());
     }
 }
