@@ -50,7 +50,7 @@ public class AppointmentDialog extends JDialog {
             timeField.setText(initial.getStartTime().format(DateTimeFormats.TIME));
             paymentCombo.setSelectedItem(initial.getPaymentType());
         } else {
-            dateField.setText(LocalDate.now().toString());
+            dateField.setText(LocalDate.now().format(DateTimeFormats.DATE));
             timeField.setText("08:00");
         }
 
@@ -60,7 +60,7 @@ public class AppointmentDialog extends JDialog {
         DialogSupport.addRow(form, 0, "Klijent:", clientCombo);
         DialogSupport.addRow(form, 1, "Djelatnik:", employeeCombo);
         DialogSupport.addRow(form, 2, "Usluga:", serviceCombo);
-        DialogSupport.addRow(form, 3, "Datum (GGGG-MM-DD):", dateField);
+        DialogSupport.addRow(form, 3, "Datum (DD.MM.GGGG.):", dateField);
         DialogSupport.addRow(form, 4, "Vrijeme (HH:MM):", timeField);
         DialogSupport.addRow(form, 5, "Očekivani završetak:", endTimeLabel);
         DialogSupport.addRow(form, 6, "Plaćanje:", paymentCombo);

@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 /** Prikaz i uređivanje osnovnih postavki salona. */
@@ -54,8 +53,8 @@ public class SettingsPanel extends JPanel {
         addressField.setText(settings.getAddress());
         phoneField.setText(settings.getPhone());
         emailField.setText(settings.getEmail());
-        openingField.setText(settings.getOpeningTime().toString());
-        closingField.setText(settings.getClosingTime().toString());
+        openingField.setText(settings.getOpeningTime().format(DateTimeFormats.TIME));
+        closingField.setText(settings.getClosingTime().format(DateTimeFormats.TIME));
     }
 
     private void save() {
@@ -65,8 +64,8 @@ public class SettingsPanel extends JPanel {
             current.setAddress(addressField.getText().trim());
             current.setPhone(phoneField.getText().trim());
             current.setEmail(emailField.getText().trim());
-            current.setOpeningTime(LocalTime.parse(openingField.getText().trim()));
-            current.setClosingTime(LocalTime.parse(closingField.getText().trim()));
+            current.setOpeningTime(DateTimeFormats.parseTime(openingField.getText()));
+            current.setClosingTime(DateTimeFormats.parseTime(closingField.getText()));
             settingsService.save(current);
             javax.swing.JOptionPane.showMessageDialog(this, "Postavke su spremljene.");
         } catch (DateTimeParseException exception) {
