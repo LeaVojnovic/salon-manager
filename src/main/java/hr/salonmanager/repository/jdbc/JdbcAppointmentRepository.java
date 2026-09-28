@@ -30,10 +30,10 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
                    e.id AS employee_id, e.name AS employee_name, e.phone AS employee_phone, e.email AS employee_email,
                    s.id AS service_id, s.name AS service_name, s.price AS service_price,
                    s.duration_minutes AS service_duration
-            FROM appointments a
-            JOIN clients c ON c.id = a.client_id
-            JOIN employees e ON e.id = a.employee_id
-            JOIN services s ON s.id = a.service_id
+            FROM appointment a
+            JOIN client c ON c.id = a.client_id
+            JOIN employee e ON e.id = a.employee_id
+            JOIN service s ON s.id = a.service_id
             """;
 
     private final Database database;
@@ -46,7 +46,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     public Appointment save(Appointment appointment) {
         return database.withConnection(connection -> {
             String sql = """
-                    INSERT INTO appointments
+                    INSERT INTO appointment
                     (client_id, employee_id, service_id, appointment_date, start_time, price, status, payment_type)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """;
@@ -65,7 +65,7 @@ public class JdbcAppointmentRepository implements AppointmentRepository {
     public Appointment update(Appointment appointment) {
         return database.withConnection(connection -> {
             String sql = """
-                    UPDATE appointments SET client_id = ?, employee_id = ?, service_id = ?,
+                    UPDATE appointment SET client_id = ?, employee_id = ?, service_id = ?,
                     appointment_date = ?, start_time = ?, price = ?, status = ?, payment_type = ?
                     WHERE id = ?
                     """;

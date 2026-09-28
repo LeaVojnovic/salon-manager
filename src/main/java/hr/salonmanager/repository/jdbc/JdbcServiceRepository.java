@@ -25,7 +25,7 @@ public class JdbcServiceRepository implements ServiceRepository {
     public Service save(Service service) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO services (name, price, duration_minutes) VALUES (?, ?, ?)",
+                    "INSERT INTO service (name, price, duration_minutes) VALUES (?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, service.getName());
                 statement.setDouble(2, service.getPrice());
@@ -43,7 +43,7 @@ public class JdbcServiceRepository implements ServiceRepository {
     public Service update(Service service) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE services SET name = ?, price = ?, duration_minutes = ? WHERE id = ?")) {
+                    "UPDATE service SET name = ?, price = ?, duration_minutes = ? WHERE id = ?")) {
                 statement.setString(1, service.getName());
                 statement.setDouble(2, service.getPrice());
                 statement.setInt(3, service.getDurationMinutes());
@@ -58,7 +58,7 @@ public class JdbcServiceRepository implements ServiceRepository {
     public Optional<Service> findById(int id) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, price, duration_minutes FROM services WHERE id = ?")) {
+                    "SELECT id, name, price, duration_minutes FROM service WHERE id = ?")) {
                 statement.setInt(1, id);
                 try (ResultSet result = statement.executeQuery()) {
                     return result.next() ? Optional.of(map(result)) : Optional.empty();
@@ -72,7 +72,7 @@ public class JdbcServiceRepository implements ServiceRepository {
         return database.withConnection(connection -> {
             List<Service> services = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, price, duration_minutes FROM services ORDER BY name")) {
+                    "SELECT id, name, price, duration_minutes FROM service ORDER BY name")) {
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) services.add(map(result));
                 }
@@ -84,7 +84,7 @@ public class JdbcServiceRepository implements ServiceRepository {
     @Override
     public void delete(int id) {
         database.withConnection(connection -> {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM services WHERE id = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM service WHERE id = ?")) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
                 return null;

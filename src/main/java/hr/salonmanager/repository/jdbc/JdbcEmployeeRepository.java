@@ -25,7 +25,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     public Employee save(Employee employee) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO employees (name, phone, email) VALUES (?, ?, ?)",
+                    "INSERT INTO employee (name, phone, email) VALUES (?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, employee.getName());
                 statement.setString(2, employee.getPhone());
@@ -43,7 +43,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     public Employee update(Employee employee) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE employees SET name = ?, phone = ?, email = ? WHERE id = ?")) {
+                    "UPDATE employee SET name = ?, phone = ?, email = ? WHERE id = ?")) {
                 statement.setString(1, employee.getName());
                 statement.setString(2, employee.getPhone());
                 statement.setString(3, employee.getEmail());
@@ -58,7 +58,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     public Optional<Employee> findById(int id) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, phone, email FROM employees WHERE id = ?")) {
+                    "SELECT id, name, phone, email FROM employee WHERE id = ?")) {
                 statement.setInt(1, id);
                 try (ResultSet result = statement.executeQuery()) {
                     return result.next() ? Optional.of(map(result)) : Optional.empty();
@@ -72,7 +72,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
         return database.withConnection(connection -> {
             List<Employee> employees = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, phone, email FROM employees ORDER BY name")) {
+                    "SELECT id, name, phone, email FROM employee ORDER BY name")) {
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) employees.add(map(result));
                 }
@@ -84,7 +84,7 @@ public class JdbcEmployeeRepository implements EmployeeRepository {
     @Override
     public void delete(int id) {
         database.withConnection(connection -> {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM employees WHERE id = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM employee WHERE id = ?")) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
                 return null;

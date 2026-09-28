@@ -1,26 +1,26 @@
 erDiagram
-    CLIENTS ||--o{ APPOINTMENTS : ima
-    EMPLOYEES ||--o{ APPOINTMENTS : obavlja
-    SERVICES ||--o{ APPOINTMENTS : koristi
-    CLIENTS {
+    CLIENT ||--o{ APPOINTMENT : ima
+    EMPLOYEE ||--o{ APPOINTMENT : obavlja
+    SERVICE ||--o{ APPOINTMENT : koristi
+    CLIENT {
         int id PK
         varchar name
         varchar phone
         varchar email
     }
-    EMPLOYEES {
+    EMPLOYEE {
         int id PK
         varchar name
         varchar phone
         varchar email
     }
-    SERVICES {
+    SERVICE {
         int id PK
         varchar name
         decimal price
         int duration_minutes
     }
-    APPOINTMENTS {
+    APPOINTMENT {
         int id PK
         int client_id FK
         int employee_id FK

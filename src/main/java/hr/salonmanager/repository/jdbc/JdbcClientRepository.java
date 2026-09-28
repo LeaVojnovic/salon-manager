@@ -24,7 +24,7 @@ public class JdbcClientRepository implements ClientRepository {
     @Override
     public Client save(Client client) {
         return database.withConnection(connection -> {
-            String sql = "INSERT INTO clients (name, phone, email) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO client (name, phone, email) VALUES (?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, client.getName());
                 statement.setString(2, client.getPhone());
@@ -41,7 +41,7 @@ public class JdbcClientRepository implements ClientRepository {
     @Override
     public Client update(Client client) {
         return database.withConnection(connection -> {
-            String sql = "UPDATE clients SET name = ?, phone = ?, email = ? WHERE id = ?";
+            String sql = "UPDATE client SET name = ?, phone = ?, email = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, client.getName());
                 statement.setString(2, client.getPhone());
@@ -57,7 +57,7 @@ public class JdbcClientRepository implements ClientRepository {
     public Optional<Client> findById(int id) {
         return database.withConnection(connection -> {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, phone, email FROM clients WHERE id = ?")) {
+                    "SELECT id, name, phone, email FROM client WHERE id = ?")) {
                 statement.setInt(1, id);
                 try (ResultSet result = statement.executeQuery()) {
                     return result.next() ? Optional.of(map(result)) : Optional.empty();
@@ -71,7 +71,7 @@ public class JdbcClientRepository implements ClientRepository {
         return database.withConnection(connection -> {
             List<Client> clients = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, name, phone, email FROM clients ORDER BY name")) {
+                    "SELECT id, name, phone, email FROM client ORDER BY name")) {
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) clients.add(map(result));
                 }
@@ -83,7 +83,7 @@ public class JdbcClientRepository implements ClientRepository {
     @Override
     public void delete(int id) {
         database.withConnection(connection -> {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM clients WHERE id = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM client WHERE id = ?")) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
                 return null;

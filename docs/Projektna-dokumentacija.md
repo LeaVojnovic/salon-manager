@@ -162,8 +162,8 @@ classDiagram
 
 ## 6. Baza podataka
 
-Baza sadrži tablice `clients`, `employees`, `services`, `appointments` i
-`salon_settings`. Tablica `appointments` ima strane ključeve prema klijentu,
+Baza sadrži tablice `Client`, `Employee`, `Service`, `Appointment` i
+`SalonSettings`. Tablica `Appointment` ima strane ključeve prema klijentu,
 djelatniku i usluzi. Cijena u toj tablici nije izračunata svaki put iz cjenika,
 nego je snapshot cijene usluge pri stvaranju termina.
 
@@ -171,28 +171,28 @@ Izvorni ERD dijagram nalazi se u `docs/dijagrami/erd.mmd`.
 
 ```mermaid
 erDiagram
-    CLIENTS ||--o{ APPOINTMENTS : ima
-    EMPLOYEES ||--o{ APPOINTMENTS : obavlja
-    SERVICES ||--o{ APPOINTMENTS : koristi
-    CLIENTS {
+    CLIENT ||--o{ APPOINTMENT : ima
+    EMPLOYEE ||--o{ APPOINTMENT : obavlja
+    SERVICE ||--o{ APPOINTMENT : koristi
+    CLIENT {
         int id PK
         varchar name
         varchar phone
         varchar email
     }
-    EMPLOYEES {
+    EMPLOYEE {
         int id PK
         varchar name
         varchar phone
         varchar email
     }
-    SERVICES {
+    SERVICE {
         int id PK
         varchar name
         decimal price
         int duration_minutes
     }
-    APPOINTMENTS {
+    APPOINTMENT {
         int id PK
         int client_id FK
         int employee_id FK
