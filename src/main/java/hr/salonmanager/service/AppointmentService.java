@@ -35,6 +35,17 @@ public class AppointmentService {
     }
 
     /** Kreira zakazani termin i provjeru dostupnosti sprema u istoj transakciji. */
+    /**
+     * Kreira termin iz već dohvaćenih domenskih objekata.
+     *
+     * @param client klijent termina
+     * @param employee djelatnik termina
+     * @param service odabrana usluga
+     * @param date datum termina
+     * @param startTime početno vrijeme
+     * @param paymentType način plaćanja
+     * @return spremljeni termin
+     */
     public Appointment createAppointment(Client client, Employee employee, Service service,
                                          LocalDate date, LocalTime startTime, PaymentType paymentType) {
         validateAppointmentData(client, employee, service, date, startTime, paymentType);
@@ -48,6 +59,7 @@ public class AppointmentService {
     }
 
     /** Ažurira termin uz provjeru statusa, radnog vremena i preklapanja. */
+    /** Ažurira termin uz provjeru dostupnosti i dopuštenog prijelaza statusa. */
     public Appointment updateAppointment(Appointment updated) {
         validateAppointmentData(updated.getClient(), updated.getEmployee(), updated.getService(),
                 updated.getAppointmentDate(), updated.getStartTime(), updated.getPaymentType());
@@ -65,15 +77,18 @@ public class AppointmentService {
         });
     }
 
+    /** Otkazuje zakazani termin. */
     public Appointment cancelAppointment(int id) {
         return changeToFinalStatus(id, AppointmentStatus.OTKAZAN);
     }
 
+    /** Označava zakazani termin završenim. */
     public Appointment completeAppointment(int id) {
         return changeToFinalStatus(id, AppointmentStatus.ZAVRSEN);
     }
 
     /** Vraća prethodno stanje iz Memento objekta i ponovno ga sprema u bazu. */
+    /** Vraća prethodno stanje termina spremljeno u Memento objektu. */
     public Appointment restoreState(int id, AppointmentMemento memento) {
         return appointmentRepository.inTransaction(() -> {
             Appointment current = findRequired(id);
