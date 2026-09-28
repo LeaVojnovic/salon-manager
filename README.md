@@ -43,3 +43,6 @@ Javadoc se može generirati naredbom:
 ```text
 mvn javadoc:javadoc
 ```
+
+Projektna dokumentacija, wireframeovi te izvori UML, ERD i arhitekturnog
+dijagrama nalaze se u mapi `docs`.

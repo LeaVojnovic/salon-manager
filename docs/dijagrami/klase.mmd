@@ -1,0 +1,34 @@
+classDiagram
+    Client "1" --> "many" Appointment
+    Employee "1" --> "many" Appointment
+    Service "1" --> "many" Appointment
+    Appointment --> AppointmentStatus
+    Appointment --> PaymentType
+    Appointment --> AppointmentMemento
+    Command <|.. ChangeAppointmentCommand
+    Command <|.. CancelAppointmentCommand
+    Command <|.. CompleteAppointmentCommand
+    AppointmentService --> AppointmentRepository
+    AppointmentService --> SettingsRepository
+
+    class Appointment {
+        +getEndTime() LocalTime
+        +saveState() AppointmentMemento
+        +restore(memento) void
+    }
+    class AppointmentMemento
+    class Command {
+        <<interface>>
+        +execute() void
+        +undo() void
+    }
+    class ChangeAppointmentCommand
+    class CancelAppointmentCommand
+    class CompleteAppointmentCommand
+    class AppointmentService
+    class AppointmentRepository {
+        <<interface>>
+    }
+    class SettingsRepository {
+        <<interface>>
+    }

@@ -1,0 +1,42 @@
+erDiagram
+    CLIENTS ||--o{ APPOINTMENTS : ima
+    EMPLOYEES ||--o{ APPOINTMENTS : obavlja
+    SERVICES ||--o{ APPOINTMENTS : koristi
+    CLIENTS {
+        int id PK
+        varchar name
+        varchar phone
+        varchar email
+    }
+    EMPLOYEES {
+        int id PK
+        varchar name
+        varchar phone
+        varchar email
+    }
+    SERVICES {
+        int id PK
+        varchar name
+        decimal price
+        int duration_minutes
+    }
+    APPOINTMENTS {
+        int id PK
+        int client_id FK
+        int employee_id FK
+        int service_id FK
+        date appointment_date
+        time start_time
+        decimal price
+        varchar status
+        varchar payment_type
+    }
+    SALON_SETTINGS {
+        int id PK
+        varchar salon_name
+        varchar address
+        varchar phone
+        varchar email
+        time opening_time
+        time closing_time
+    }

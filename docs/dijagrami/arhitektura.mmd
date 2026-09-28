@@ -1,0 +1,9 @@
+flowchart LR
+    User[Korisnik] --> View[Java Swing View]
+    View --> Controller[SalonController]
+    Controller --> Service[Service sloj]
+    Service --> Interfaces[Repository sučelja]
+    Interfaces --> Jdbc[JDBC Repository]
+    Jdbc --> Database[(Relacijska baza)]
+    Service --> Command[Command]
+    Command --> Memento[Memento]
