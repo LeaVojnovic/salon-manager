@@ -216,7 +216,7 @@ public class MainFrame extends JFrame {
     private void addClient() {
         ClientDialog dialog = new ClientDialog(this, null);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveClient(dialog.getValue()), this::refreshClients);
+        if (dialog.isSaved()) run(() -> controller.saveClient(dialog.getValue()), this::refreshAll);
     }
 
     private void editClient() {
@@ -224,7 +224,7 @@ public class MainFrame extends JFrame {
         if (selected == null) return;
         ClientDialog dialog = new ClientDialog(this, selected);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveClient(dialog.getValue()), this::refreshClients);
+        if (dialog.isSaved()) run(() -> controller.saveClient(dialog.getValue()), this::refreshAll);
     }
 
     private void deleteClient() {
@@ -236,7 +236,7 @@ public class MainFrame extends JFrame {
     private void addEmployee() {
         EmployeeDialog dialog = new EmployeeDialog(this, null);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveEmployee(dialog.getValue()), this::refreshEmployees);
+        if (dialog.isSaved()) run(() -> controller.saveEmployee(dialog.getValue()), this::refreshAll);
     }
 
     private void editEmployee() {
@@ -244,7 +244,7 @@ public class MainFrame extends JFrame {
         if (selected == null) return;
         EmployeeDialog dialog = new EmployeeDialog(this, selected);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveEmployee(dialog.getValue()), this::refreshEmployees);
+        if (dialog.isSaved()) run(() -> controller.saveEmployee(dialog.getValue()), this::refreshAll);
     }
 
     private void deleteEmployee() {
@@ -256,7 +256,7 @@ public class MainFrame extends JFrame {
     private void addService() {
         ServiceDialog dialog = new ServiceDialog(this, null);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveService(dialog.getValue()), this::refreshServices);
+        if (dialog.isSaved()) run(() -> controller.saveService(dialog.getValue()), this::refreshAll);
     }
 
     private void editService() {
@@ -264,7 +264,7 @@ public class MainFrame extends JFrame {
         if (selected == null) return;
         ServiceDialog dialog = new ServiceDialog(this, selected);
         dialog.setVisible(true);
-        if (dialog.isSaved()) run(() -> controller.saveService(dialog.getValue()), this::refreshServices);
+        if (dialog.isSaved()) run(() -> controller.saveService(dialog.getValue()), this::refreshAll);
     }
 
     private void deleteService() {
